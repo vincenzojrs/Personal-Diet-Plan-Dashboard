@@ -1,6 +1,5 @@
 import datetime
 import pandas as pd
-import csv
 
 class Person:
     def __init__(self, name: str, year: int, gender: str, height: int, weight: float, exercise: float, bmr=None, tdee=None):
