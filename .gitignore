@@ -12,11 +12,14 @@ build/
 develop-eggs/
 dist/
 downloads/
+bin/
+include/
 eggs/
 .eggs/
 lib/
-lib64/
+lib64
 parts/
+pyvenv.cfg
 sdist/
 var/
 wheels/
