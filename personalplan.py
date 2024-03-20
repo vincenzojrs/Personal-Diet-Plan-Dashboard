@@ -72,13 +72,14 @@ class Day:
     def summary(self):
         """ Create a daily summary """
         
-        # Concatenate the meals
-        day_summary = {}
+        day_summary = pd.DataFrame()
+        
+        # For each meail, create a temporary dataset containing all the information regarding the meal itself
         for meal in self.meals:
-            day_summary = {**day_summary, **self.meals[meal]}
+            temp_df = pd.DataFrame.from_dict(self.meals[meal], orient = 'index', columns=['Quantity', 'Kcal', 'Fat', 'Sat_Fat', 'Carbs', 'Sugars', 'Fibers', 'Proteins', 'Salt', 'Meal'])
+            # Concatenate the meals, so that they form a "day"
+            day_summary = pd.concat([day_summary, temp_df], axis = 0)
             
-        # Create the dataframe
-        day_summary = pd.DataFrame.from_dict(day_summary, orient='index', columns=['Quantity', 'Kcal', 'Fat', 'Sat_Fat', 'Carbs', 'Sugars', 'Fibers', 'Proteins', 'Salt', 'Meal'])
         print(day_summary)
         
         print("Today you eat: ")
@@ -91,7 +92,7 @@ class Day:
 vincenzo = Person("Vincenzo", 1999, "M", 177, 83.5, 1.2)
 nutritionaltable = NutritionalTable('./dataframe.csv').df
 
-daily_breakfast = {'skyr': 1, 'fette toast': 4, 'schocokreme': 50}
+daily_breakfast = {'skyr': 1, 'fette toast': 4, 'schocokreme': 50,}
 
 Monday = Day()
 Monday.adding_food(daily_breakfast, nutritionaltable, 'breakfast')

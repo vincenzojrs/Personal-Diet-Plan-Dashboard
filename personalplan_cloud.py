@@ -1,7 +1,6 @@
 import datetime
 import pandas as pd
 import csv
-from test_streamlit import import_nutritional_database_streamlit
 
 class Person:
     def __init__(self, name: str, year: int, gender: str, height: int, weight: float, exercise: float, bmr=None, tdee=None):
@@ -45,7 +44,7 @@ class Day:
           
         for food, quantity in dictionary_food.items():
             # Create a list which will return the nutritional value of the food you'd like to eat, multiplied by the quantity of it starting from the nutritional db
-            lista = [round(quantity * float(value), 2) for value in nutritionaltable.loc[food].iloc[3:-1].tolist()]
+            lista = [round(quantity * float(value), 2) for value in nutritional_dataframe.loc[food].iloc[3:-1].tolist()]
             # Append the quantity and the meal label on the list
             lista.insert(0, quantity)
             lista.append(meal_label)
@@ -57,14 +56,13 @@ class Day:
 
     def summary(self):
         """ Create a daily summary """
+
+        day_summary = pd.DataFrame()
         
-        # Concatenate the meals
-        day_summary = {}
         for meal in self.meals:
-            day_summary = {**day_summary, **self.meals[meal]}
+            temp_df = pd.DataFrame.from_dict(self.meals[meal], orient = 'index', columns=['Quantity', 'Kcal', 'Fat', 'Sat_Fat', 'Carbs', 'Sugars', 'Fibers', 'Proteins', 'Salt', 'Meal'])
+            day_summary = pd.concat([day_summary, temp_df], axis = 0)
             
-        # Create the dataframe
-        day_summary = pd.DataFrame.from_dict(day_summary, orient='index', columns=['Quantity', 'Kcal', 'Fat', 'Sat_Fat', 'Carbs', 'Sugars', 'Fibers', 'Proteins', 'Salt', 'Meal'])
         print(day_summary)
         
         print("Today you eat: ")
@@ -73,14 +71,3 @@ class Day:
             
         print("\nFor each meal you eat:")
         print(day_summary.groupby('Meal').sum())
-      
-vincenzo = Person("Vincenzo", 1999, "M", 177, 83.5, 1.2)
-
-nutritionaltable = NutritionalTable(import_nutritional_database_streamlit()).df
-
-daily_breakfast = {'skyr': 1, 'fette toast': 4, 'schocokreme': 50}
-
-Monday = Day()
-Monday.adding_food(daily_breakfast, nutritionaltable, 'breakfast')
-Monday.adding_food({'pasta': 150, 'olio evo' : 15}, nutritionaltable, 'lunch')
-Monday.summary()

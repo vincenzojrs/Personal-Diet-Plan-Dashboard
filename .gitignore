@@ -13,6 +13,8 @@ develop-eggs/
 dist/
 downloads/
 bin/
+share/
+etc/
 .streamlit/
 include/
 eggs/
