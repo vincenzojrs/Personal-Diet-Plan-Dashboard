@@ -53,7 +53,7 @@ class Day:
         # Add to the meals method, the meal label, the food and its information
         self.meals[meal_label] = food_data
 
-    def summary(self):
+    def summary(self, verbose = False):
         """ Create a daily summary """
 
         day_summary = pd.DataFrame()
@@ -61,12 +61,15 @@ class Day:
         for meal in self.meals:
             temp_df = pd.DataFrame.from_dict(self.meals[meal], orient = 'index', columns=['Quantity', 'Kcal', 'Fat', 'Sat_Fat', 'Carbs', 'Sugars', 'Fibers', 'Proteins', 'Salt', 'Meal'])
             day_summary = pd.concat([day_summary, temp_df], axis = 0)
-            
-        print(day_summary)
         
-        print("Today you eat: ")
-        for column in day_summary.columns[1:-1]:
-            print(round(day_summary[column].sum(), 2), column)
+        if verbose == True: 
+            print(day_summary)
+        
+            print("Today you eat: ")
+            for column in day_summary.columns[1:-1]:
+                print(round(day_summary[column].sum(), 2), column)
             
-        print("\nFor each meal you eat:")
-        print(day_summary.groupby('Meal').sum())
+            print("\nFor each meal you eat:")
+            print(day_summary.groupby('Meal').sum())
+        
+        return day_summary
