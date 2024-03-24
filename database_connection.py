@@ -43,5 +43,3 @@ def import_weight_database():
                    nrows=1000)
     df.dropna(how='all', inplace = True)
     return df
-
-def import_weight_
