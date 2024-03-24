@@ -1,7 +1,6 @@
 import datetime
 import pandas as pd
 import csv
-import test_streamlit
 
 class Person:
     def __init__(self, name: str, year: int, gender: str, height: int, weight: float, exercise: float, bmr=None, tdee=None):
@@ -83,8 +82,7 @@ class Day:
         print(day_summary)
         
         print("Today you eat: ")
-        for column in day_summary.columns[1:-1]:
-            print(round(day_summary[column].sum(), 2), column)
+        print(day_summary.iloc[:,1:-1].sum())
             
         print("\nFor each meal you eat:")
         print(day_summary.groupby('Meal').sum())

@@ -27,12 +27,11 @@ class DataFrame:
         # Create a series of dates, which starts from the next day of the last day of the actual weight mesurements + 60 days
         forecast_dates = pd.date_range(start = weight_df.index[-1] + pd.Timedelta(days=1), periods=forecast_period)
         
-        # Create a dataframe of forecasts and add a symbol to underline they're predictions (1, opposing to 0 in the weight measurements)
+        # Create a dataframe of forecasts
         forecast = pd.DataFrame(forecasts, index = forecast_dates)
         
-        last_row = weight_df.iloc[-1:]
-        
-        forecast = pd.concat([last_row, forecast], ignore_index = False)
+        # Add the last_row of the measurements as a first row of predictions, not to create gaps in the plot
+        forecast = pd.concat([weight_df.iloc[-1:], forecast], ignore_index = False)
         
         return forecast
     
@@ -47,7 +46,7 @@ def make_plot(measurements, predictions):
     # Create a double-axis figure
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
-    # Add traces, one for each value {weight, bodyfat, and muscle}
+    # Add traces, one for each value {weight, bodyfat, and muscle}, both measurements and predictions
     fig.add_trace(go.Scatter(x=measurements.index, y=measurements['peso'], name="Weight", mode = 'lines'), secondary_y=False)
     fig.add_trace(go.Scatter(x=predictions.index, y=predictions['peso'], name="Predicted Weight", opacity = 0.7), secondary_y=False)
 
@@ -76,10 +75,10 @@ data = DataFrame()
 measurements = data.weightdataframe
 predictions = data.forecastedf
 
-st.write(measurements)
+st.dataframe(measurements.style.format({
+    'peso': '{} kg'.format,
+    'bodyfat': '{:,.2%}'.format,
+    'muscle': '{:,.2%}'.format,
+}), use_container_width = True)
+
 make_plot(measurements, predictions)
-
-
-
-
-

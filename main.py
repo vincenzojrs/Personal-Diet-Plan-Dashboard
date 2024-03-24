@@ -24,7 +24,7 @@ Monday = Day()
 Monday.adding_food(daily_breakfast, nutritionaltable, 'breakfast')
 Monday.adding_food(monday_lunch, nutritionaltable, 'lunch')
 Monday.adding_food(monday_dinner, nutritionaltable, 'dinner')
-
+      
 Tuesday = Day()
 Tuesday.adding_food(daily_breakfast, nutritionaltable, 'breakfast')
 Tuesday.adding_food(tuesday_lunch, nutritionaltable, 'lunch')
