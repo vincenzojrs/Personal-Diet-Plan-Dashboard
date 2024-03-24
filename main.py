@@ -3,7 +3,7 @@ from database_connection import import_nutritional_database
 
 vincenzo = Person("Vincenzo", 1999, "M", 177, 83.5, 1.2)
 
-nutritionaltable = NutritionalTable(import_nutritional_database()).df
+nutritionaltable = NutritionalTable(import_nutritional_database(cloud = False)).df
 
 daily_breakfast = {'skyr': 1, 'fette toast': 4, 'schocokreme': 50, 'chia' : 3}
 monday_lunch = {'mix legumi': 200, 'olio evo' : 15}
