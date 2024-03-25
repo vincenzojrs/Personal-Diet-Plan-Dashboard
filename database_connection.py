@@ -3,7 +3,7 @@ import gspread
 from google.oauth2 import service_account
 import streamlit as st
 
-def import_nutritional_database(cloud = False):
+def import_nutritional_database():
     if cloud == False:
         conn = st.connection("gsheets", type=GSheetsConnection)
         df = conn.read(worksheet="nutritional_database",
@@ -12,8 +12,6 @@ def import_nutritional_database(cloud = False):
                        nrows=100)
         df.dropna(how='all', inplace = True)
         return df
-    elif cloud == True:
-        pass
 
 def import_weight_database():
     conn = st.connection("gsheets", type=GSheetsConnection)
