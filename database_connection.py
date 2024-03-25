@@ -18,5 +18,8 @@ def import_weight_database():
                    ttl="60m",
                    usecols=[0,1,2,3],
                    nrows=1000)
+    # Drop rows where all values are missing
     df.dropna(how='all', inplace = True)
+    # Inferring missing data using linear interpolation
+    df.interpolate(method='linear', inplace=True)
     return df
