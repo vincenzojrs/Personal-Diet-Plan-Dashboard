@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(layout = 'wide', page_title = 'Enzo devi dimagrire')
+st.set_page_config(layout = 'wide', page_title = 'Enzo devi dimagrire', page_icon = ':pig:')
 st.title('Enzo devi dimagrire')
 
 from main import Monday, Tuesday, Wednesday, Thursday
