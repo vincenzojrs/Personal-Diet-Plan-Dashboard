@@ -35,7 +35,7 @@ with tab2:
     with col2:
         st.subheader("Macronutrients contribution")
         st.dataframe(tuesday_dataframe[-1].T, use_container_width = True)
-    st.subheader("")
+    st.subheader("Meal nutrients")
     st.dataframe(tuesday_dataframe[2], use_container_width = True)
               
 with tab3:
