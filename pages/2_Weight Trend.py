@@ -5,10 +5,6 @@ import numpy as np
 from database_connection import import_weight_database
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-import matplotlib.pyplot as plt
-import seaborn as sns
-import matplotlib
-from matplotlib import rc
 
 class DataFrame:
     def _forecast(self, series, periods):
