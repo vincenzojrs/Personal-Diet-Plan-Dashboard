@@ -5,6 +5,10 @@ import numpy as np
 from database_connection import import_weight_database
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import matplotlib.pyplot as plt
+import seaborn as sns
+import matplotlib
+from matplotlib import rc
 
 class DataFrame:
     def _forecast(self, series, periods):
@@ -57,16 +61,16 @@ def make_plot(measurements, predictions):
     fig.add_trace(go.Scatter(x=predictions.index, y=predictions['muscle'], name="Predicted Muscle%", opacity = 0.7), secondary_y=True)
 
     # Add title
-    fig.update_layout(title_text="Weight, Bodyfat and Daily Trend")
+    fig.update_layout(title_text="Weight, Bodyfat and Daily Trend", legend_orientation='h')
 
     # Set x-axis title
-    fig.update_xaxes(title_text="Date")
+    fig.update_xaxes(fixedrange = True)
 
     # Set y-axes title
-    fig.update_yaxes(title_text="Weight in kilograms", secondary_y=False, showgrid = True)
-    fig.update_yaxes(title_text="Bodyfat and Muscle in %", secondary_y=True, showgrid = False)
+    fig.update_yaxes(title_text="Weight in kilograms", secondary_y=False, showgrid = True, fixedrange = True)
+    fig.update_yaxes(title_text="Bodyfat and Muscle in %", secondary_y=True, showgrid = False, fixedrange = True)
     
-    st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)
+    st.plotly_chart(fig, theme = 'streamlit', use_container_width = True, config={'displayModeBar': False, 'editable': False})
     
 st.set_page_config(layout = 'wide')
 st.title("Weight, Bodyfat, and Muscle Daily Measurements and Trends")
