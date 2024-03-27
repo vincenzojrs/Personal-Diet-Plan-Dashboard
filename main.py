@@ -5,20 +5,20 @@ vincenzo = Person("Vincenzo", 1999, "M", 177, 83.5, 1.2)
 
 nutritionaltable = NutritionalTable(import_nutritional_database()).df
 
-daily_breakfast = {'skyr': 1, 'fette toast': 4, 'schocokreme': 50, 'chia' : 3}
+daily_breakfast = {'skyr': 1, 'fette toast': 4, "burro d'arachidi": 20, 'chia' : 3}
 monday_lunch = {'mix legumi': 200, 'olio evo' : 15}
-monday_dinner = {'pasta': 50, 'olio evo' : 15, 'feta greca' : 1, 'verdurine': 240}
+monday_dinner = {'pasta': 100, 'tonno scatola': 2, 'olio evo': 15, 'verdurine': 240}
 
 tuesday_lunch = {'mix legumi': 200, 'olio evo' : 15}
-tuesday_dinner = {'bastoncini': 5, 'olio evo': 15, 'verdurine': 240}
+tuesday_dinner = {'riso integrale': 120, 'salmone affumicato': 1, 'olio evo' : 15}
 
-wednesday_lunch = {'mix legumi': 100, 'pane integrale': 3, 'olio evo' : 15}
-wednesday_dinner = {'tonno scatola': 2, 'olio evo': 15, 'verdurine': 240}
+wednesday_lunch = {'mix legumi': 100, 'pane integrale': 4, 'olio evo' : 15}
+wednesday_dinner = {'riso integrale': 100, 'salmone affumicato': 1, 'olio evo' : 15}
 
-thursday_lunch = {'riso integrale': 120, 'olio evo': 15, 'uova': 3}
-thursday_dinner = {'feta greca': 1, 'verdurine': 240}
+thursday_lunch = {'riso integrale': 120, 'olio evo': 15, 'uova': 4}
+thursday_dinner = {'riso integrale': 100, 'tonno scatola': 2, 'olio evo' : 15}
 
-friday_lunch = {'riso integrale': 100, 'salmone affumicato': 100, 'olio evo' : 15}
+friday_lunch = {'riso integrale': 100, 'salmone affumicato': 1, 'olio evo' : 15}
 
 Monday = Day()
 Monday.adding_food(daily_breakfast, nutritionaltable, 'breakfast')
@@ -39,3 +39,8 @@ Thursday = Day()
 Thursday.adding_food(daily_breakfast, nutritionaltable, 'breakfast')
 Thursday.adding_food(thursday_lunch, nutritionaltable, 'lunch')
 Thursday.adding_food(thursday_dinner, nutritionaltable, 'dinner')
+
+Friday = Day()
+Friday.adding_food(daily_breakfast, nutritionaltable, 'breakfast')
+Friday.adding_food(friday_lunch, nutritionaltable, 'lunch')
+#Friday.adding_food(friday_dinner, nutritionaltable, 'dinner')

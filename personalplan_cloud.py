@@ -95,7 +95,7 @@ class Day:
         if verbose == True:
             
             self.daily_summary = self.day_summary.iloc[:,1:-1].sum()
-            self.meal_summary = self.day_summary.groupby('Meal').sum()
+            self.meal_summary = self.day_summary.groupby('Meal').sum().reindex(['breakfast', 'lunch', 'dinner'])
             self.calories_summary = self._check_proportions(self.daily_summary)
             
             return self.day_summary, self.daily_summary.to_frame().T, self.meal_summary, self.calories_summary	
