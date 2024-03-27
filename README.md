@@ -1,1 +1,1 @@
-Streamlit dashboard [here](enzo-devi-dimagrire.streamlit.app) 
+Streamlit dashboard [here](enzo-devi-dimagrire.streamlit.app)
