@@ -2,9 +2,10 @@ from sklearn.linear_model import LinearRegression
 import streamlit as st
 import pandas as pd
 import numpy as np
-from database_connection import import_weight_database
+from database_connection import connect_weight_database
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from authentication import logout_button, create_form
 
 class DataFrame:
     def _forecast(self, series, periods):
@@ -37,48 +38,82 @@ class DataFrame:
     
     def __init__(self):
         # Import the weight dataframe and preprocess it
-        self.weightdataframe = import_weight_database()
-        self.weightdataframe['data'] = pd.to_datetime(self.weightdataframe['data'], format='%d/%m/%Y')
-        self.weightdataframe.set_index('data', inplace=True)
+        self.weightdataframe = connect_weight_database()
+        self.weightdataframe['date'] = pd.to_datetime(self.weightdataframe['date'], format='%d/%m/%Y')
+        self.weightdataframe.set_index('date', inplace=True)
         self.forecastedf = self._new_dataframe(self.weightdataframe)
 
-def make_plot(measurements, predictions):
-    # Create a double-axis figure
-    fig = make_subplots(specs=[[{"secondary_y": True}]])
+class WebPage:
 
-    # Add traces, one for each value {weight, bodyfat, and muscle}, both measurements and predictions
-    fig.add_trace(go.Scatter(x=measurements.index, y=measurements['peso'], name="Weight", mode = 'lines'), secondary_y=False)
-    fig.add_trace(go.Scatter(x=predictions.index, y=predictions['peso'], name="Predicted Weight", opacity = 0.7), secondary_y=False)
+    def _page_config(self):
+        """ Configure the page with layout, title, and session """
+        st.set_page_config(layout = 'wide')
+        st.title("Weight, Bodyfat, and Muscle Daily Measurements and Trends")
+        
+        create_form()
+        logout_button()
 
-    fig.add_trace(go.Scatter(x=measurements.index, y=measurements['bodyfat'], name="BodyFat%", mode = 'lines'), secondary_y=True)
-    fig.add_trace(go.Scatter(x=predictions.index, y=predictions['bodyfat'], name="Predicted BodyFat%", opacity = 0.7), secondary_y=True)
+    def _page_content(self):
+        """ Define the page content """
+        def make_plot(measurements, predictions):
+            """ Create the function to plot the graph """
+            # Create a double-axis figure
+            fig = make_subplots(specs=[[{"secondary_y": True}]])
 
-    fig.add_trace(go.Scatter(x=measurements.index, y=measurements['muscle'], name="Muscle%", mode = 'lines'), secondary_y=True)
-    fig.add_trace(go.Scatter(x=predictions.index, y=predictions['muscle'], name="Predicted Muscle%", opacity = 0.7), secondary_y=True)
+            # Add traces, one for each value {weight, bodyfat, and muscle}, both measurements and predictions
+            fig.add_trace(go.Scatter(x=measurements.index, y=measurements['weight'], name="Weight", mode = 'lines'), secondary_y=False)
+            fig.add_trace(go.Scatter(x=predictions.index, y=predictions['weight'], name="Predicted Weight", opacity = 0.7), secondary_y=False)
 
-    # Add title
-    fig.update_layout(title_text="Weight, Bodyfat and Daily Trend", legend_orientation='h')
+            fig.add_trace(go.Scatter(x=measurements.index, y=measurements['bodyfat'], name="BodyFat%", mode = 'lines'), secondary_y=True)
+            fig.add_trace(go.Scatter(x=predictions.index, y=predictions['bodyfat'], name="Predicted BodyFat%", opacity = 0.7), secondary_y=True)
 
-    # Set x-axis title
-    fig.update_xaxes(fixedrange = True)
+            fig.add_trace(go.Scatter(x=measurements.index, y=measurements['muscle'], name="Muscle%", mode = 'lines'), secondary_y=True)
+            fig.add_trace(go.Scatter(x=predictions.index, y=predictions['muscle'], name="Predicted Muscle%", opacity = 0.7), secondary_y=True)
 
-    # Set y-axes title
-    fig.update_yaxes(title_text="Weight in kilograms", secondary_y=False, showgrid = True, fixedrange = True)
-    fig.update_yaxes(title_text="Bodyfat and Muscle in %", secondary_y=True, showgrid = False, fixedrange = True)
-    
-    st.plotly_chart(fig, theme = 'streamlit', use_container_width = True, config={'displayModeBar': False, 'editable': False})
-    
-st.set_page_config(layout = 'wide')
-st.title("Weight, Bodyfat, and Muscle Daily Measurements and Trends")
-data = DataFrame()
+            # Add title
+            fig.update_layout(title_text="Weight, Bodyfat and Daily Trend", legend_orientation='h')
 
-measurements = data.weightdataframe
-predictions = data.forecastedf
+            # Set x-axis title
+            fig.update_xaxes(fixedrange = True)
 
-st.dataframe(measurements.style.format({
-    'peso': '{} kg'.format,
-    'bodyfat': '{:,.2%}'.format,
-    'muscle': '{:,.2%}'.format,
-}), use_container_width = True)
+            # Set y-axes title
+            fig.update_yaxes(title_text="Weight in kilograms", secondary_y=False, showgrid = True, fixedrange = True)
+            fig.update_yaxes(title_text="Bodyfat and Muscle in %", secondary_y=True, showgrid = False, fixedrange = True)
+            
+            st.plotly_chart(fig, theme = 'streamlit', use_container_width = True, config={'displayModeBar': False, 'editable': False})
 
-make_plot(measurements, predictions)
+        
+        data = DataFrame()
+        measurements = data.weightdataframe
+        predictions = data.forecastedf
+        
+        st.dataframe(measurements.style.format({
+            'peso': '{} kg'.format,
+            'bodyfat': '{:,.2%}'.format,
+            'muscle': '{:,.2%}'.format,}), use_container_width = True)
+        
+        make_plot(measurements, predictions)
+
+        # If you're logged in
+        if st.session_state.get('logged_in'):
+            # Create an expander which contains the measurements form
+            with st.expander(label = 'Do you want to add a measurement?'):
+                # Create the form
+                with st.form("my_form", clear_on_submit=True):
+                    st.write("Weight submission")
+                    date_input = st.text_input("DD/MM/AAAA")
+                    weight_input = st.text_input("Weight in format")
+                    muscle_input = st.text_input("Muscle in percentage")
+                    bodyfat_input = st.text_input("Bodyfat in percentage")
+                    
+                    submitted = st.form_submit_button("Submit")
+                    # Once you press the submit button, write data
+                    if submitted:
+                        data_to_write = [date_input, weight_input, muscle_input, bodyfat_input]
+                        connect_weight_database('write', data = data_to_write)
+
+    def __init__(self):
+        self._page_config()
+        self._page_content()
+
+webpage = WebPage()

@@ -1,9 +1,9 @@
 from personalplan_cloud import Person, NutritionalTable, Day
-from database_connection import import_nutritional_database
+from database_connection import connect_nutritional_database
 
 vincenzo = Person("Vincenzo", 1999, "M", 177, 83.5, 1.2)
 
-nutritionaltable = NutritionalTable(import_nutritional_database()).df
+nutritionaltable = NutritionalTable(connect_nutritional_database()).df
 
 daily_breakfast = {'skyr': 1, 'fette toast': 4, "burro d'arachidi": 20, 'chia' : 3}
 monday_lunch = {'mix legumi': 200, 'olio evo' : 15}
