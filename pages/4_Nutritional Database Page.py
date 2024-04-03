@@ -2,7 +2,7 @@ import streamlit as st
 from database_connection import connect_nutritional_database
 from authentication import logout_button, create_form
 
-st.set_page_config(layout='wide')
+st.set_page_config(layout = 'wide', page_title = 'Enzo devi dimagrire', page_icon = ':pig:')
 st.title('Nutritional Database Page')
 st.write('The database from Google Sheet where the app retrieve information from. It mainly contains nutritional information regarding food I usually eat')
 

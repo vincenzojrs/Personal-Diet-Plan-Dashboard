@@ -52,7 +52,7 @@ class Week_Consumption:
 
 class Webpage:
     def _page_config(self):
-        st.set_page_config(layout='wide')
+        st.set_page_config(layout = 'wide', page_title = 'Enzo devi dimagrire', page_icon = ':pig:')
         st.title('Weekly Consumption and Expense')
         st.header('The quantity to be bought for each food, weekly')
         create_form()

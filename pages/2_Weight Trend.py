@@ -47,7 +47,7 @@ class WebPage:
 
     def _page_config(self):
         """ Configure the page with layout, title, and session """
-        st.set_page_config(layout = 'wide')
+        st.set_page_config(layout = 'wide', page_title = 'Enzo devi dimagrire', page_icon = ':pig:')
         st.title("Weight, Bodyfat, and Muscle Daily Measurements and Trends")
         
         create_form()
@@ -102,7 +102,7 @@ class WebPage:
                 with st.form("my_form", clear_on_submit=True):
                     st.write("Weight submission")
                     date_input = st.text_input("DD/MM/AAAA")
-                    weight_input = st.text_input("Weight in format")
+                    weight_input = st.text_input("Weight")
                     muscle_input = st.text_input("Muscle in percentage")
                     bodyfat_input = st.text_input("Bodyfat in percentage")
                     
