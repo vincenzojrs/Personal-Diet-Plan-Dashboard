@@ -6,7 +6,7 @@ from authentication import create_form, logout_button
 class Webpage:
     def _page_config(self):
         st.set_page_config(layout = 'wide', page_title = 'Enzo devi dimagrire', page_icon = ':pig:')
-        st.title('Enzo devi dimagrire')
+        st.title('Detailed diet')
         create_form()
         logout_button()        
 

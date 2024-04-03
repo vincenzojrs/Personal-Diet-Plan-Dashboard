@@ -6,7 +6,7 @@ import base64
 class Webpage:
     def _page_config(self):
         st.set_page_config(layout = 'wide', page_title = 'Enzo devi dimagrire', page_icon = ':pig:')
-        st.title('Summary')
+        st.title('Enzo devi dimagrire')
         create_form()
         logout_button()
 
