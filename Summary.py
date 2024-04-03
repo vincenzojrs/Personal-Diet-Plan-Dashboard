@@ -19,18 +19,24 @@ class Webpage:
         daily_proportions = pd.DataFrame()
         
         for day, day_str in weekdays:
-            daily_df = day.summary(verbose=True)[0].iloc[:, [0, -1]].copy()  # Make a copy to avoid SettingWithCopyWarning
-            daily_df.loc[:, 'weekday'] = day_str  # Use .loc to set the value
+            # For each day of the week, return a dataframe of each meal, containing essential info
+            daily_df = day.summary(verbose=True)[0].iloc[:, [0, -1]].copy()
+            # For each dataframe returned, add a column containing weekday label
+            daily_df.loc[:, 'weekday'] = day_str
             daily_meals_in_short = pd.concat([daily_meals_in_short, daily_df], axis=0)
 
+            # For each day of the week, return a dataframe containing the daily nutrients
             daily_nutrients = pd.concat([daily_nutrients, day.summary(verbose = True)[1]], axis = 0)
+            # For each day of the week, return a dataframe containing the daily contributions of macronutrients to kcals
             daily_proportions = pd.concat([daily_proportions, day.summary(verbose = True)[-1].T], axis = 0)
             daily_proportions = daily_proportions.replace('%', '', regex=True).astype(float)
         
+        # Return succint daily meals, average daily nutrients and average daily macro contributions
         return daily_meals_in_short, daily_nutrients.mean().to_frame().T, daily_proportions.mean().to_frame().T
 
     def _page_content(self):
         def _coloring(day):
+            """Return a styler dataframe map, to color rows according to the value of a certain column"""
             if day == 'monday':
                 color = 'green'
             elif day == 'tuesday':
@@ -48,6 +54,7 @@ class Webpage:
             return f'background-color: {color}'
         
         def _st_csv_download_button(dataframe):
+            """Encode a dataframe to base64 and create a donwload button"""
             csv = dataframe.to_csv(index=False) #if no filename is given, a string is returned
             b64 = base64.b64encode(csv.encode()).decode()
             href = f'<a href="data:file/csv;base64,{b64}">Download CSV File</a>'
@@ -57,8 +64,10 @@ class Webpage:
         st.header('My diet, in short')
         st.dataframe(daily_meals_in_short.reset_index(drop = False).style.apply(lambda x: [_coloring(x['weekday'])]*len(x), axis=1), use_container_width = True)
         _st_csv_download_button(daily_meals_in_short.reset_index(drop = False))
+
         st.header('Average daily nutrients')
         st.dataframe(daily_nutrients, use_container_width = True)
+        
         st.header('Average daily kcals contribution per macronutrient, in percentage')
         st.dataframe(daily_proportions, use_container_width = True)
    
